@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./node
+    container_name: app
+    restart: always
+    platform: linux/x86_64
+    volumes:
+      - ./node:/usr/src/app
+      - /usr/src/app/node_modules
+    tty: true
+    depends_on: 
+      - db    
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./database:/var/lib/mysql
+      - ./node/.docker/mysql:/docker-entrypoint-initdb.d
+    restart: always
+    container_name: db
+    tty: true
+    platform: linux/x86_64
+    environment: 
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=password  
+      
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    platform: linux/x86_64
+    ports:
+      - "8080:80"
+    depends_on: 
+      - db
+      - app
