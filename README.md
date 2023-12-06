@@ -5,4 +5,4 @@ docker-compose up -d
 ```
 
 ### Para acessar digite o endereço abaixo em seu navegador
-[http://localhost:8080/]
+http://localhost:8080
